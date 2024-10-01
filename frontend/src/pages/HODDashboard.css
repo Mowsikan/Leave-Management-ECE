@@ -1,0 +1,50 @@
+/* src/pages/HODDashboard.css */
+.hod-dashboard {
+    padding: 20px;
+  }
+  
+  .pending-requests {
+    margin-top: 20px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+  }
+  
+  /* Mobile Styles */
+  @media (max-width: 600px) {
+    .hod-dashboard {
+      padding: 10px;
+    }
+  
+    .pending-requests {
+      padding: 10px;
+    }
+  }
+  
+  /* Inside each dashboard's CSS file */
+.profile-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .profile-image {
+    width: 100px; /* Adjust as needed */
+    height: 100px; /* Adjust as needed */
+    border-radius: 50%;
+    margin-bottom: 10px;
+  }
+  
+  .profile-info {
+    text-align: center;
+  }
+  
+  .profile-info h3 {
+    margin: 0;
+  }
+  
+  .profile-info p {
+    margin: 5px 0;
+  }
+  

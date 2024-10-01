@@ -1,0 +1,63 @@
+/* src/pages/StaffDashboard.css */
+.staff-dashboard {
+    padding: 20px;
+  }
+  
+  .request-list {
+    margin-top: 20px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+  }
+  
+  .request-item {
+    border-bottom: 1px solid #e0e0e0;
+    padding: 10px 0;
+  }
+  
+  .request-item:last-child {
+    border-bottom: none;
+  }
+  
+  /* Mobile Styles */
+  @media (max-width: 600px) {
+    .staff-dashboard {
+      padding: 10px;
+    }
+  
+    .request-list {
+      padding: 10px;
+    }
+  
+    .request-item {
+      padding: 8px 0;
+    }
+  }
+  
+/* Inside each dashboard's CSS file */
+.profile-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .profile-image {
+    width: 100px; /* Adjust as needed */
+    height: 100px; /* Adjust as needed */
+    border-radius: 50%;
+    margin-bottom: 10px;
+  }
+  
+  .profile-info {
+    text-align: center;
+  }
+  
+  .profile-info h3 {
+    margin: 0;
+  }
+  
+  .profile-info p {
+    margin: 5px 0;
+  }
+  

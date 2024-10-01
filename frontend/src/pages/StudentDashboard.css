@@ -1,0 +1,83 @@
+.student-dashboard {
+    text-align: center;
+  }
+  
+  .leave-od-form {
+    margin-top: 20px;
+  }
+  
+  .leave-od-form label {
+    display: block;
+    margin-bottom: 10px;
+  }
+  
+  .leave-od-form input[type="text"],
+  .leave-od-form textarea {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+  }
+  
+  .leave-od-form input[type="radio"] {
+    margin-right: 10px;
+  }
+  
+  .leave-od-form button {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .leave-od-form button:hover {
+    background-color: #45a049;
+  }
+  /* src/pages/StudentDashboard.css */
+.student-dashboard {
+    padding: 20px;
+  }
+  
+  .calendar-container {
+    margin-top: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Mobile Styles */
+  @media (max-width: 600px) {
+    .student-dashboard {
+      padding: 10px;
+    }
+  
+    .calendar-container {
+      padding: 10px;
+    }
+  }
+/* Inside each dashboard's CSS file */
+.profile-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .profile-image {
+    width: 100px; /* Adjust as needed */
+    height: 100px; /* Adjust as needed */
+    border-radius: 50%;
+    margin-bottom: 10px;
+  }
+  
+  .profile-info {
+    text-align: center;
+  }
+  
+  .profile-info h3 {
+    margin: 0;
+  }
+  
+  .profile-info p {
+    margin: 5px 0;
+  }
+  
+  
