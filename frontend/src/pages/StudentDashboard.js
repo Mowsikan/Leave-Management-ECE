@@ -1,12 +1,14 @@
 // src/pages/StudentDashboard.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
+import './StudentDashboard.css';
 
 const StudentDashboard = () => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [showForm, setShowForm] = useState(false);
-
+  
+  // Form state variables
   const [name, setName] = useState('');
   const [rollNo, setRollNo] = useState('');
   const [department, setDepartment] = useState('');
@@ -33,18 +35,25 @@ const StudentDashboard = () => {
     formData.append('date', selectedDate);
 
     try {
-      const response = await fetch('http://localhost:5000/api/leave-request', {
+      const response = await fetch('http://localhost:5000/api/leave-requests', {
         method: 'POST',
         body: formData,  // We don't use JSON.stringify for FormData
       });
 
       if (response.ok) {
         alert('Leave request submitted successfully!');
-        setShowForm(false); // Hide the form after successful submission
-        // Optionally, clear form fields
+        // Clear form fields after successful submission
+        setName('');
+        setRollNo('');
+        setDepartment('');
+        setYearOfStudy('');
+        setReason('');
+        setProof(null);
+        setShowForm(false); // Hide the form after submission
+        setSelectedDate(null); // Clear the selected date
       } else {
         const result = await response.json();
-        alert(`Error submitting leave request: ${result.error}`);
+        alert(result.message || 'Error submitting leave request.');
       }
     } catch (err) {
       console.error('Request failed', err);
@@ -52,9 +61,29 @@ const StudentDashboard = () => {
     }
   };
 
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const storedUser = JSON.parse(localStorage.getItem('user'));
+    setUser(storedUser); // Set the user details from localStorage
+  }, []);
+
   return (
     <div className="student-dashboard">
+      <img src="/images/collegeLogo.png" alt="College Logo" className="login-logo_stud" />
       <h1>Student Dashboard</h1>
+
+      {user && (
+        <div className="profile-card">
+          <h2>Profile Details</h2>
+          <img src="/images/mowsikan02.png" alt="mowsikan" className="profile-images"/>
+          <p><strong>Name:</strong> {user.name}</p>
+          <p><strong>Roll No:</strong> {user.rollNo}</p>
+          <p><strong>Department:</strong> {user.department}</p>
+          <p><strong>Year:</strong> {user.year}</p>
+        </div>
+      )}
+
       <div>
         <h3>Select a date to submit a leave/OD request:</h3>
         <Calendar onChange={handleDateChange} value={selectedDate} />

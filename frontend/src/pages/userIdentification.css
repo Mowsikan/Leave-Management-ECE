@@ -1,42 +1,90 @@
-/* src/pages/UserIdentification.css */
 .user-identification {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    background-color: #f0f4f8;
-    text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: #f0f4f8;
+  text-align: center;
+}
+
+h1 {
+  margin-bottom: 30px; /* More space between the title and options */
+}
+
+.user-options {
+  display: flex;
+  justify-content: center; /* Align items to the center */
+  gap: 30px; /* Gap between the options for better spacing */
+  flex-wrap: wrap; /* Ensure responsiveness on smaller screens */
+  width: 100%;
+  max-width: 900px;
+}
+
+.user-option {
+  cursor: pointer;
+  transition: transform 0.2s;
+  flex: 1;
+  max-width: 200px; /* Restrict maximum width for each option */
+  margin: 0 10px; /* Equal spacing on both sides */
+  text-align: center; /* Center text and image */
+  padding: 20px; /* Add padding inside the card */
+  border: 2px solid #ccc; /* Card border */
+  border-radius: 10px; /* Rounded corners for the card */
+  background-color: white; /* Card background */
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+}
+
+.user-option img {
+  width: 120px; /* Adjust the size of the icons */
+  height: auto; /* Maintain the aspect ratio */
+  margin-bottom: 10px;
+}
+
+.user-option p {
+  font-size: 18px;
+  font-weight: bold;
+  margin-top: 5px;
+}
+
+.user-option:hover {
+  transform: scale(1.05); /* Slightly enlarge the card on hover */
+  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.2); /* Stronger shadow on hover */
+}
+
+.logo-useridentification {
+  height: 200px;
+  width: 900px;
+  margin-bottom: 30px; /* Space between logo and heading */
+}
+
+@media only screen and (max-width: 768px) {
+  .user-options {
+    flex-direction: column; /* Stack vertically on small screens */
+    align-items: center; /* Center items when stacked */
   }
-  
-  h1 {
+
+  .user-option {
     margin-bottom: 20px;
   }
-  
-  .user-options {
-    display: flex;
-    justify-content: space-around;
-    width: 80%;
-    max-width: 800px; /* Optional: set a max width */
+
+  .logo-useridentification {
+    height: 150px;
+    width: 600px;
   }
-  
-  .user-option {
-    cursor: pointer;
-    transition: transform 0.2s;
-    flex: 1;
-    margin: 0 10px; /* Spacing between items */
-  }
-  
+}
+
+@media only screen and (max-width: 400px) {
   .user-option img {
-    width: 100px; /* Set your desired size */
-    height: auto; /* Keep aspect ratio */
+    width: 80px; /* Smaller image for mobile */
   }
-  
-  .user-option h2 {
-    margin-top: 10px;
+
+  .logo-useridentification {
+    height: 100px;
+    width: 300px;
   }
-  
-  .user-option:hover {
-    transform: scale(1.05); /* Scale effect on hover */
+
+  .user-option p {
+    font-size: 16px;
   }
-  
+}

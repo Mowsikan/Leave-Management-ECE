@@ -1,75 +1,74 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import './HODDashboard.css';
 
 const HODDashboard = () => {
   const [leaveRequests, setLeaveRequests] = useState([]);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     const fetchLeaveRequests = async () => {
       try {
-        const res = await axios.get('/api/leave-requests?status=Forwarded to HOD');
+        // Fetch leave requests with status 'Forwarded to HOD'
+        const res = await axios.get(`http://localhost:5000/api/leave-requests?status=Forwarded to HOD`);
         setLeaveRequests(res.data);
       } catch (error) {
         console.error('Error fetching leave requests:', error);
       }
     };
     fetchLeaveRequests();
-  }, []);
 
- // Fetch the leave requests from the server when the component mounts
- useEffect(() => {
-  fetch('/api/leave-requests')
-    .then((response) => response.json())
-    .then((data) => {
-      setLeaveRequests(data);  // Store the leave requests in state
-    })
-    .catch((error) => {
-      console.error('Error fetching leave requests:', error);
-    });
-}, []);
+    // Load user profile from localStorage
+    const storedUser = JSON.parse(localStorage.getItem('user'));
+    setUser(storedUser);
+  }, []);
 
   const acceptRequest = async (id) => {
     try {
-      await axios.put(`/api/accept-leave/${id}`);
-      alert('Leave request approved!');
-      setLeaveRequests(leaveRequests.filter((request) => request._id !== id)); // Remove request from HOD dashboard
+      await axios.put(`http://localhost:5000/api/accept-leave/${id}`);
+      alert('Leave request accepted!');
+      setLeaveRequests(leaveRequests.filter((request) => request._id !== id));
     } catch (error) {
-      console.error('Error approving leave request:', error);
+      console.error('Error accepting leave request:', error);
     }
   };
 
-  // Reject the request and update the UI
-const rejectRequest = (id) => {
-  fetch(`/api/leave/reject/${id}`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  })
-    .then((response) => response.json())
-    .then((data) => {
+  const rejectRequest = async (id) => {
+    try {
+      await axios.delete(`http://localhost:5000/api/leave/reject/${id}`);
       alert('Request rejected.');
-      // Update the leaveRequests state by removing the rejected request
       setLeaveRequests(leaveRequests.filter((request) => request._id !== id));
-    })
-    .catch((error) => {
+    } catch (error) {
       console.error('Error rejecting request:', error);
-    });
-};
-
+    }
+  };
 
   return (
-    <div>
-      <h2>HOD Dashboard</h2>
+    <div className="hod-dashboard">
+      <img src="/images/collegeLogo.png" alt="College Logo" className="login-logo_hod" />
+      <h2 className="hod-text">HOD Dashboard</h2>
+
+      {user && (
+  <div className="profile-card">
+    <img src={user.image} alt={`${user.name}'s profile`} className="profile-image" />
+    <h3>Profile Details</h3>
+    <p><strong>Name:</strong> {user.name}</p>
+    <p><strong>HOD ID:</strong> {user.hodId}</p>
+    <p><strong>Department:</strong> {user.department}</p>
+    <p><strong>Role:</strong> Head of Department (HOD)</p>
+  </div>
+)}
+
+
       {leaveRequests.length === 0 ? (
-        <p>No leave requests forwarded</p>
+        <p>No leave requests forwarded by staff</p>
       ) : (
         leaveRequests.map((request) => (
-          <div key={request._id}>
-            <p>Name: {request.name}</p>
-            <p>Roll No: {request.rollNo}</p>
-            <p>Reason: {request.reason}</p>
-            <p>Date: {new Date(request.date).toLocaleDateString()}</p>
+          <div key={request._id} className="request-item">
+            <p><strong>Name:</strong> {request.name}</p>
+            <p><strong>Roll No:</strong> {request.rollNo}</p>
+            <p><strong>Reason:</strong> {request.reason}</p>
+            <p><strong>Date:</strong> {new Date(request.date).toLocaleDateString()}</p>
             <button onClick={() => acceptRequest(request._id)}>Accept</button>
             <button onClick={() => rejectRequest(request._id)}>Reject</button>
           </div>

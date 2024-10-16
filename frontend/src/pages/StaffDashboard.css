@@ -1,63 +1,81 @@
-/* src/pages/StaffDashboard.css */
-.staff-dashboard {
-    padding: 20px;
-  }
-  
-  .request-list {
-    margin-top: 20px;
-    background-color: white;
-    border-radius: 10px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    padding: 15px;
-  }
-  
-  .request-item {
-    border-bottom: 1px solid #e0e0e0;
-    padding: 10px 0;
-  }
-  
-  .request-item:last-child {
-    border-bottom: none;
-  }
-  
-  /* Mobile Styles */
-  @media (max-width: 600px) {
-    .staff-dashboard {
-      padding: 10px;
-    }
-  
-    .request-list {
-      padding: 10px;
-    }
-  
-    .request-item {
-      padding: 8px 0;
-    }
-  }
-  
-/* Inside each dashboard's CSS file */
+/* StaffDashboard.css and HODDashboard.css */
+
+
+.staff-dashboard, .hod-dashboard {
+  padding: 0px;
+  margin: 0;
+}
 .profile-card {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .profile-image {
-    width: 100px; /* Adjust as needed */
-    height: 100px; /* Adjust as needed */
-    border-radius: 50%;
-    margin-bottom: 10px;
-  }
-  
-  .profile-info {
-    text-align: center;
-  }
-  
-  .profile-info h3 {
-    margin: 0;
-  }
-  
-  .profile-info p {
-    margin: 5px 0;
-  }
-  
+  margin: 20px auto;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  max-width: 400px;
+  background-color: #fff;
+  text-align: left;
+}
+
+.profile-card h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #007bff;
+}
+
+.profile-card p {
+  margin: 10px 0;
+  font-size: 16px;
+  color: #333;
+  text-align: center;
+}
+
+.profile-card strong {
+  font-weight: 600;
+}
+.request-item {
+  background-color: #f9f9f9;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+button {
+  margin-right: 10px;
+  padding: 8px 12px;
+  background-color: #f44336;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #e53935;
+}
+
+button:last-child {
+  background-color: #f44336;
+}
+
+button:last-child:hover {
+  background-color: #e53935;
+}
+.login-logo_staff{
+  width: 600px; /* Adjust size as necessary */
+  margin-top: 0px;
+}
+.staff-text{
+  text-align: center;
+}
+.profile-images{
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+  align-items: center;
+}
+.error-message {
+  color: red;
+  font-weight: bold;
+  margin: 10px 0;
+}

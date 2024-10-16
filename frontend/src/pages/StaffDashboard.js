@@ -1,79 +1,86 @@
+
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import './StaffDashboard.css';
 
 const StaffDashboard = () => {
   const [leaveRequests, setLeaveRequests] = useState([]);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     const fetchLeaveRequests = async () => {
       try {
-        const res = await axios.get('/api/leave-requests?status=Pending');
+        const res = await axios.get(`http://localhost:5000/api/leave-requests?status=Pending`);
         setLeaveRequests(res.data);
       } catch (error) {
         console.error('Error fetching leave requests:', error);
       }
     };
     fetchLeaveRequests();
-  }, []);
 
-   // Fetch the leave requests from the server when the component mounts
-   useEffect(() => {
-    fetch('/api/leave-requests')
-      .then((response) => response.json())
-      .then((data) => {
-        setLeaveRequests(data);  // Store the leave requests in state
-      })
-      .catch((error) => {
-        console.error('Error fetching leave requests:', error);
-      });
+    // Load user profile from localStorage
+    const storedUser = JSON.parse(localStorage.getItem('user'));
+    setUser(storedUser);
   }, []);
 
   const forwardToHOD = async (id) => {
     try {
-      await axios.put(`/api/forward-leave/${id}`);
+      await axios.put(`http://localhost:5000/api/forward-leave/${id}`);
       alert('Leave request forwarded to HOD!');
-      setLeaveRequests(leaveRequests.filter((request) => request._id !== id)); // Remove request from staff dashboard
+      setLeaveRequests(leaveRequests.filter((request) => request._id !== id));
     } catch (error) {
       console.error('Error forwarding leave request:', error);
     }
   };
-// Reject the request and update the UI
-const rejectRequest = (id) => {
-  fetch(`/api/leave/reject/${id}`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      alert('Request rejected.');
-      // Update the leaveRequests state by removing the rejected request
-      setLeaveRequests(leaveRequests.filter((request) => request._id !== id));
-    })
-    .catch((error) => {
-      console.error('Error rejecting request:', error);
-    });
-};
 
+  const rejectRequest = (id) => {
+    fetch(`http://localhost:5000/api/leave/reject/${id}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+    })
+      .then((response) => response.json())
+      .then(() => {
+        alert('Request rejected.');
+        setLeaveRequests(leaveRequests.filter((request) => request._id !== id));
+      })
+      .catch((error) => {
+        console.error('Error rejecting request:', error);
+      });
+  };
 
   return (
-    <div>
-      <h2>Staff Dashboard</h2>
-      {leaveRequests.length === 0 ? (
-        <p>No pending leave requests</p>
-      ) : (
-        leaveRequests.map((request) => (
-          <div key={request._id}>
-            <p>Name: {request.name}</p>
-            <p>Roll No: {request.rollNo}</p>
-            <p>Reason: {request.reason}</p>
-            <p>Date: {new Date(request.date).toLocaleDateString()}</p>
-            <button onClick={() => forwardToHOD(request._id)}>Forward to HOD</button>
-            <button onClick={() => rejectRequest(request._id)}>Reject</button>
-          </div>
-        ))
-      )}
+    <div className="staff-dashboard">
+      <img src="/images/collegeLogo.png" alt="College Logo" className="login-logo_staff" />
+      <h2 className="staff-text">Staff Dashboard</h2>
+
+      {user && (
+  <div className="profile-card">
+    <img src={user.image} alt={`${user.name}'s profile`} className="profile-image" />
+    <h3>Profile Details</h3>
+    <p><strong>Name:</strong> {user.name}</p>
+    <p><strong>Staff ID:</strong> {user.staffId}</p>
+    <p><strong>Department:</strong> {user.department}</p>
+    <p><strong>Role:</strong> Staff</p>
+  </div>
+)}
+
+
+
+{leaveRequests.length === 0 ? (
+  <p>No pending leave requests</p>
+) : (
+  leaveRequests.map((request) => (
+    <div key={request._id} className="request-item">
+      <p><strong>Name:</strong> {request.name}</p>
+      <p><strong>Roll No:</strong> {request.rollNo}</p>
+      <p><strong>Reason:</strong> {request.reason}</p>
+      <p><strong>Date:</strong> {new Date(request.date).toLocaleDateString()}</p>
+      <button onClick={() => forwardToHOD(request._id)}>Forward to HOD</button>
+      <button onClick={() => rejectRequest(request._id)}>Reject</button>
+    </div>
+  ))
+)}
+
     </div>
   );
 };

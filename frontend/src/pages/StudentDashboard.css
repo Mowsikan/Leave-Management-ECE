@@ -1,83 +1,252 @@
+/* src/pages/StudentDashboard.css */
+
+/* Container for the entire student dashboard */
 .student-dashboard {
-    text-align: center;
+  max-width: 800px;
+  padding: 20px;
+  background-color: #f4f7f6; /* Soft grey background */
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow for card effect */
+  text-align: center;
+}
+
+/* Main Heading */
+.student-dashboard h1 {
+  font-size: 2.5rem;
+  color: #333; /* Dark grey for better contrast */
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
+/* Date selection section */
+.student-dashboard h3 {
+  font-size: 1.2rem;
+  color: #555;
+  margin-bottom: 15px;
+}
+
+/* Form container */
+.leave-form {
+  background-color: white;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Shadow for card-like effect */
+  margin-top: 20px;
+}
+
+/* Form Heading */
+.leave-form h2 {
+  color: #333;
+  margin-bottom: 20px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-align: left;
+}
+
+/* Input field styling */
+.leave-form label {
+  display: block;
+  font-size: 1rem;
+  color: #444; /* Slightly darker grey for labels */
+  font-weight: 600;
+  margin-bottom: 8px;
+  text-align: left;
+}
+
+.leave-form input[type="text"],
+.leave-form textarea,
+.leave-form input[type="file"] {
+  width: 100%;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  margin-bottom: 20px;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Smooth focus transition */
+}
+
+/* Focused input fields */
+.leave-form input[type="text"]:focus,
+.leave-form textarea:focus {
+  border-color: #28a745; /* Green border on focus */
+  box-shadow: 0 0 8px rgba(40, 167, 69, 0.3); /* Green shadow effect on focus */
+}
+
+/* Textarea */
+.leave-form textarea {
+  height: 120px;
+  resize: vertical; /* Allow vertical resize */
+}
+
+/* Radio button styling */
+.leave-form input[type="radio"] {
+  margin-right: 10px;
+}
+
+.leave-form label input[type="radio"] + label {
+  margin-right: 20px;
+}
+
+/* Submit Button Styling */
+.leave-form button[type="submit"] {
+  background-color: #ff4800; /* Professional green color */
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 6px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  width: 100%;
+  transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth hover transition */
+}
+
+/* Hover effect for submit button */
+.leave-form button[type="submit"]:hover {
+  background-color: #ff4d00; /* Darker green on hover */
+  transform: translateY(-3px); /* Slight lift effect */
+}
+
+/* Responsive Design */
+
+/* Larger screens */
+@media (max-width: 1024px) {
+  .student-dashboard {
+    padding: 30px;
   }
-  
-  .leave-od-form {
-    margin-top: 20px;
-  }
-  
-  .leave-od-form label {
-    display: block;
-    margin-bottom: 10px;
-  }
-  
-  .leave-od-form input[type="text"],
-  .leave-od-form textarea {
-    width: 100%;
-    padding: 10px;
-    margin-top: 5px;
-  }
-  
-  .leave-od-form input[type="radio"] {
-    margin-right: 10px;
-  }
-  
-  .leave-od-form button {
-    padding: 10px 20px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    cursor: pointer;
-  }
-  
-  .leave-od-form button:hover {
-    background-color: #45a049;
-  }
-  /* src/pages/StudentDashboard.css */
-.student-dashboard {
+
+  .leave-form {
     padding: 20px;
   }
-  
-  .calendar-container {
-    margin-top: 20px;
-    border-radius: 10px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Medium screens (tablets, small laptops) */
+@media (max-width: 768px) {
+  .student-dashboard {
+    max-width: 100%;
+    padding: 20px;
   }
-  
-  /* Mobile Styles */
-  @media (max-width: 600px) {
-    .student-dashboard {
-      padding: 10px;
-    }
-  
-    .calendar-container {
-      padding: 10px;
-    }
+
+  .leave-form {
+    padding: 15px;
   }
-/* Inside each dashboard's CSS file */
+}
+
+/* Mobile screens */
+@media (max-width: 480px) {
+  .student-dashboard h1 {
+    font-size: 1.8rem;
+  }
+
+  .leave-form h2 {
+    font-size: 1.3rem;
+  }
+
+  .leave-form input,
+  .leave-form textarea {
+    font-size: 0.9rem;
+    padding: 10px;
+  }
+
+  .leave-form button[type="submit"] {
+    font-size: 1rem;
+    padding: 10px;
+  }
+}
 .profile-card {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .profile-image {
-    width: 100px; /* Adjust as needed */
-    height: 100px; /* Adjust as needed */
-    border-radius: 50%;
-    margin-bottom: 10px;
-  }
-  
-  .profile-info {
-    text-align: center;
-  }
-  
-  .profile-info h3 {
-    margin: 0;
-  }
-  
-  .profile-info p {
-    margin: 5px 0;
-  }
-  
-  
+  margin: 20px auto;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  max-width: 400px;
+  background-color: #fff;
+  text-align: left;
+}
+
+.profile-card h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #007bff;
+}
+
+.profile-card p {
+  margin: 10px 0;
+  font-size: 16px;
+  color: #333;
+  text-align: center;
+}
+
+.profile-card strong {
+  font-weight: 600;
+}
+
+.calendar-section {
+  margin-bottom: 20px; /* Space below calendar */
+  text-align: center; /* Center calendar text */
+  width: 100%; /* Full width for smaller screens */
+  max-width: 400px; /* Limit width */
+  align-items: center;
+}
+
+.react-calendar {
+  border: none; /* Remove default border */
+  border-radius: 8px; /* Rounded corners */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  overflow: hidden; /* Clip excess */
+color: #333;
+  margin: auto;
+  width: 50%;
+  padding: 10px;
+}
+
+/* Ensuring text color for the tiles */
+.react-calendar__month-view__days__day {
+  color: black; /* Default text color for days */
+}
+.react-calendar__month-view__header {
+  color: black; /* Color for month names */
+  font-weight: bold; /* Bold font for month names */
+}
+.react-calendar__navigation button{
+  color: #333;
+  background-color: #ffffff; /* Light gray background on hover */
+}
+
+
+.react-calendar__navigation button:hover {
+  color: #333;
+  background-color: #ff0000; /* Light gray background on hover */
+}
+
+.react-calendar__tile {
+  border-radius: 4px; /* Rounded corners for calendar tiles */
+  color: #333;
+}
+
+.react-calendar__tile:enabled:hover {
+  background-color: #007bff; /* Change background on hover */
+  color: white; /* White text on hover */
+}
+
+.react-calendar__tile--active {
+  background-color: #0056b3; /* Active date color */
+  color: white; /* White text for active date */
+}
+
+.login-logo_stud {
+  width: 600px; /* Adjust size as necessary */
+  height: auto;
+  margin-top: 200px;
+}
+
+.profile-images{
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+}
+
+.nav-bar-comp{
+  display: inline;
+
+}
+
