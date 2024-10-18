@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './StaffDashboard.css';
@@ -10,7 +9,8 @@ const StaffDashboard = () => {
   useEffect(() => {
     const fetchLeaveRequests = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/leave-requests?status=Pending`);
+        // Fetch leave requests with status 'Pending'
+        const res = await axios.get(`http://localhost:5000/api/leave-requests`);
         setLeaveRequests(res.data);
       } catch (error) {
         console.error('Error fetching leave requests:', error);
@@ -25,27 +25,23 @@ const StaffDashboard = () => {
 
   const forwardToHOD = async (id) => {
     try {
-      await axios.put(`http://localhost:5000/api/forward-leave/${id}`);
+      await axios.put(`http://localhost:5000/api/leave-requests/forward-to-hod/${id}`);
       alert('Leave request forwarded to HOD!');
+      // Filter out the forwarded request from the list
       setLeaveRequests(leaveRequests.filter((request) => request._id !== id));
     } catch (error) {
       console.error('Error forwarding leave request:', error);
     }
   };
 
-  const rejectRequest = (id) => {
-    fetch(`http://localhost:5000/api/leave/reject/${id}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-    })
-      .then((response) => response.json())
-      .then(() => {
-        alert('Request rejected.');
-        setLeaveRequests(leaveRequests.filter((request) => request._id !== id));
-      })
-      .catch((error) => {
-        console.error('Error rejecting request:', error);
-      });
+  const rejectRequest = async (id) => {
+    try {
+      await axios.delete(`http://localhost:5000/api/leave/reject/${id}`);
+      alert('Request rejected.');
+      setLeaveRequests(leaveRequests.filter((request) => request._id !== id));
+    } catch (error) {
+      console.error('Error rejecting request:', error);
+    }
   };
 
   return (
@@ -54,33 +50,30 @@ const StaffDashboard = () => {
       <h2 className="staff-text">Staff Dashboard</h2>
 
       {user && (
-  <div className="profile-card">
-    <img src={user.image} alt={`${user.name}'s profile`} className="profile-image" />
-    <h3>Profile Details</h3>
-    <p><strong>Name:</strong> {user.name}</p>
-    <p><strong>Staff ID:</strong> {user.staffId}</p>
-    <p><strong>Department:</strong> {user.department}</p>
-    <p><strong>Role:</strong> Staff</p>
-  </div>
-)}
+        <div className="profile-card">
+          <img src={user.image} alt={`${user.name}'s profile`} className="profile-image" />
+          <h3>Profile Details</h3>
+          <p><strong>Name:</strong> {user.name}</p>
+          <p><strong>Staff ID:</strong> {user.staffId}</p>
+          <p><strong>Department:</strong> {user.department}</p>
+          <p><strong>Role:</strong> Staff</p>
+        </div>
+      )}
 
-
-
-{leaveRequests.length === 0 ? (
-  <p>No pending leave requests</p>
-) : (
-  leaveRequests.map((request) => (
-    <div key={request._id} className="request-item">
-      <p><strong>Name:</strong> {request.name}</p>
-      <p><strong>Roll No:</strong> {request.rollNo}</p>
-      <p><strong>Reason:</strong> {request.reason}</p>
-      <p><strong>Date:</strong> {new Date(request.date).toLocaleDateString()}</p>
-      <button onClick={() => forwardToHOD(request._id)}>Forward to HOD</button>
-      <button onClick={() => rejectRequest(request._id)}>Reject</button>
-    </div>
-  ))
-)}
-
+      {leaveRequests.length === 0 ? (
+        <p>No pending leave requests</p>
+      ) : (
+        leaveRequests.map((request) => (
+          <div key={request._id} className="request-item">
+            <p><strong>Name:</strong> {request.name}</p>
+            <p><strong>Roll No:</strong> {request.rollNo}</p>
+            <p><strong>Reason:</strong> {request.reason}</p>
+            <p><strong>Date:</strong> {new Date(request.date).toLocaleDateString()}</p>
+            <button onClick={() => forwardToHOD(request._id)}>Forward to HOD</button>
+            <button onClick={() => rejectRequest(request._id)}>Reject</button>
+          </div>
+        ))
+      )}
     </div>
   );
 };

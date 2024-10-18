@@ -130,7 +130,8 @@ const leaveRequestSchema = new mongoose.Schema({
   reason: { type: String, required: true },
   proof: { type: String, required: false }, // Assuming proof can be optional
   date: { type: Date, required: true },
-  status: { type: String, default: 'Pending' }, // Default status
+  status: { type: String, enum: ['Pending', 'Forwarded to HOD', 'Accepted', 'Rejected'],  // Add your statuses here
+    default: 'Pending', required: true}, // Default status
 });
 
 const LeaveRequest = mongoose.model('LeaveRequest', leaveRequestSchema);
@@ -223,32 +224,41 @@ app.get('/api/leave-requests', async (req, res) => {
 });
 
 //getting single request
-app.get('/api/leave-requests/:id', async (req, res) => {
+
+
+// Route for staff to approve and forward the request to HOD
+app.put('/api/leave-requests/forward-to-hod/:id', async (req, res) => {
   try {
-    const leaveRequests = await LeaveRequest.findById(req.params.id); // Adjust query as needed
-    res.status(200).json(leaveRequests);
+    const leaveRequestId = req.params.id;
+
+    // Find the leave request and update its status to 'Forwarded to HOD'
+    const leaveRequest = await LeaveRequest.findByIdAndUpdate(
+      leaveRequestId,
+      { status: 'Forwarded to HOD' },  // Status updated only after staff approval
+      { new: true }
+    );
+
+    if (!leaveRequest) {
+      return res.status(404).json({ message: 'Leave request not found' });
+    }
+
+    res.status(200).json({ message: 'Leave request forwarded to HOD successfully', leaveRequest });
   } catch (error) {
-    console.error('Error fetching leave requests:', error);
-    res.status(500).json({ message: 'Error fetching leave requests', error: error.message });
+    res.status(500).json({ message: 'Server error while forwarding leave request', error });
   }
 });
 
-// Forward request to HOD and notify student
-app.put('/api/forward-leave/:id', async (req, res) => {
+// Route to get all leave requests for HOD (only requests forwarded to HOD)
+// Assuming LeaveRequest is your Mongoose model
+app.get('/api/leave-requests/hod', async (req, res) => {
   try {
-    const request = await LeaveRequest.findById(req.params.id);
-    if (!request) {
-      return res.status(404).json({ error: 'Leave request not found' });
-    }
-
-    await LeaveRequest.findByIdAndUpdate(req.params.id, { status: 'Forwarded to HOD' });
-
-    sendEmail('mowsikan08@gmail.com', 'Leave/OD Request Forwarded', `A leave/OD request has been forwarded by staff.`);
-    sendEmail(request.name, 'Leave/OD Request Forwarded', `Your leave/OD request has been forwarded to HOD.`);
-    res.status(200).send('Leave request forwarded and emails sent.');
+    // Fetch leave requests where the status is 'Forwarded to HOD'
+    const leaveRequests = await LeaveRequest.find({ status: 'Forwarded to HOD' });
+    res.status(200).json(leaveRequests); // Return the fetched requests
   } catch (error) {
-    res.status(500).send('Error forwarding leave request.');
+    res.status(500).json({ message: 'Error fetching leave requests for HOD', error });
   }
+
 });
 
 // Function to handle sending leave requests
@@ -308,19 +318,12 @@ app.post('/send-leave-request', async (req, res) => {
 // Accept leave request (Staff or HOD)
 app.put('/api/accept-leave/:id', async (req, res) => {
   try {
-    const request = await LeaveRequest.findById(req.params.id);
+    const request = await LeaveRequest.findByIdAndUpdate(req.params.id, { status: 'Accepted' });
     if (!request) {
       return res.status(404).json({ error: 'Leave request not found' });
     }
 
-    if (request.status === 'Pending') {
-      await LeaveRequest.findByIdAndUpdate(req.params.id, { status: 'Forwarded to HOD' });
-      sendEmail('mowsikan08@gmail.com', 'Leave/OD Request Forwarded', `A leave/OD request has been forwarded by staff.`);
-    } else if (request.status === 'Forwarded to HOD') {
-      await LeaveRequest.findByIdAndDelete(req.params.id);
-      sendEmail('selvihari2006@gmail.com', 'Leave/OD Request Approved', `Your leave/OD request has been approved.`);
-    }
-    res.status(200).send('Leave request accepted.');
+    res.status(200).send(request);
   } catch (error) {
     res.status(500).send('Error accepting leave request.');
   }
@@ -347,23 +350,30 @@ app.post('/login/student', async (req, res) => {
   const { email, password } = req.body;
 
   try {
+    // Find the student by email
     const student = await Student.findOne({ email });
     if (!student) {
-      return res.status(400).json({ message: 'Invalid credentials' });
+      return res.status(404).json({ message: 'Student not found' });
     }
 
-    // Compare plain text passwords directly
-    if (student.password !== password) {
-      return res.status(400).json({ message: 'Invalid credentials' });
+    // Compare the provided password with the stored password
+    const isPasswordValid = await bcrypt.compare(password, student.password);
+    if (!isPasswordValid) {
+      return res.status(401).json({ message: 'Invalid password' });
     }
 
-    const token = jwt.sign({ id: student._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-    res.json({ token, student });
+    // Generate JWT for authentication
+    const token = jwt.sign({ id: student._id, role: 'student' }, process.env.JWT_SECRET, {
+      expiresIn: '1h',
+    });
+
+    res.status(200).json({ token, student });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Server error' });
+    console.error('Login error:', error);
+    res.status(500).json({ message: 'Error logging in', error: error.message });
   }
 });
+
 
 // CC Login
 app.post('/login/cc', async (req, res) => {

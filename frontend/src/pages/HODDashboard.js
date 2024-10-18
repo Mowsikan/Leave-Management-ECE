@@ -6,11 +6,11 @@ const HODDashboard = () => {
   const [leaveRequests, setLeaveRequests] = useState([]);
   const [user, setUser] = useState(null);
 
-  useEffect(() => {
+   useEffect(() => {
     const fetchLeaveRequests = async () => {
       try {
-        // Fetch leave requests with status 'Forwarded to HOD'
-        const res = await axios.get(`http://localhost:5000/api/leave-requests?status=Forwarded to HOD`);
+        // Fetch leave requests with status 'Pending'
+        const res = await axios.get(`http://localhost:5000/api/leave-requests/hod`);
         setLeaveRequests(res.data);
       } catch (error) {
         console.error('Error fetching leave requests:', error);
@@ -49,16 +49,15 @@ const HODDashboard = () => {
       <h2 className="hod-text">HOD Dashboard</h2>
 
       {user && (
-  <div className="profile-card">
-    <img src={user.image} alt={`${user.name}'s profile`} className="profile-image" />
-    <h3>Profile Details</h3>
-    <p><strong>Name:</strong> {user.name}</p>
-    <p><strong>HOD ID:</strong> {user.hodId}</p>
-    <p><strong>Department:</strong> {user.department}</p>
-    <p><strong>Role:</strong> Head of Department (HOD)</p>
-  </div>
-)}
-
+        <div className="profile-card">
+          <img src={user.image} alt={`${user.name}'s profile`} className="profile-image" />
+          <h3>Profile Details</h3>
+          <p><strong>Name:</strong> {user.name}</p>
+          <p><strong>HOD ID:</strong> {user.hodId}</p>
+          <p><strong>Department:</strong> {user.department}</p>
+          <p><strong>Role:</strong> Head of Department (HOD)</p>
+        </div>
+      )}
 
       {leaveRequests.length === 0 ? (
         <p>No leave requests forwarded by staff</p>
