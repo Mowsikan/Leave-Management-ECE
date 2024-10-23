@@ -62,12 +62,13 @@ button:last-child:hover {
 }
 .login-logo_staff{
   width: 600px; /* Adjust size as necessary */
-  margin-top: 0px;
+  
+  align-items: center;
 }
 .staff-text{
   text-align: center;
 }
-.profile-images{
+.profile-image{
   display: block;
   margin-left: auto;
   margin-right: auto;

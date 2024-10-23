@@ -52,7 +52,7 @@ const StaffDashboard = () => {
       {user && (
         <div className="profile-card">
           <img src={user.image} alt={`${user.name}'s profile`} className="profile-image" />
-          <h3>Profile Details</h3>
+          <h2>Profile Details</h2>
           <p><strong>Name:</strong> {user.name}</p>
           <p><strong>Staff ID:</strong> {user.staffId}</p>
           <p><strong>Department:</strong> {user.department}</p>
@@ -69,6 +69,7 @@ const StaffDashboard = () => {
             <p><strong>Roll No:</strong> {request.rollNo}</p>
             <p><strong>Reason:</strong> {request.reason}</p>
             <p><strong>Date:</strong> {new Date(request.date).toLocaleDateString()}</p>
+            <p><strong>Leave-Type:</strong>{request.leavetype}</p>
             <button onClick={() => forwardToHOD(request._id)}>Forward to HOD</button>
             <button onClick={() => rejectRequest(request._id)}>Reject</button>
           </div>

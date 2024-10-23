@@ -4,7 +4,7 @@ import './LoginForm.css'; // Make sure to include your CSS
 
 
 const users = [
-  { username: 'hod', password: 'hod123', role: 'hod', name: 'Dr. Sudhakar', hodId: 'HOD001', department: 'ECE', image: '/images/hod.png' },
+  { username: 'hod', password: 'hod123', role: 'hod', name: 'Dr. Sudhakar', hodId: 'HOD001', department: 'ECE', image: '/images/hod.jpg' },
 ];
 
 

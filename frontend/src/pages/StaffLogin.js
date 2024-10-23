@@ -5,9 +5,9 @@ import './LoginForm.css'; // Make sure to include your CSS
 
 
 const users = [
-  { username: 'staff1', password: 'staff123', role: 'staff', name: 'vignesh', staffId: 'STF001', department: 'ECE-A', image: '/images/staff1.png' },
-  { username: 'staff2', password: 'staff456', role: 'staff', name: 'gowri', staffId: 'STF002', department: 'ECE-B', image: '/images/staff2.png' },
-  { username: 'staff3', password: 'staff456', role: 'staff', name: 'sivaranjani', staffId: 'STF003', department: 'ACT', image: '/images/staff2.png' },
+  { username: 'staff1', password: 'staff123', role: 'staff', name: 'Vignesh', staffId: 'STF001', department: 'ECE-A', image: '/images/staff.jpg' },
+  { username: 'staff2', password: 'staff456', role: 'staff', name: 'Gowri Jayashri', staffId: 'STF002', department: 'ECE-B', image: '/images/staff.jpg' },
+  { username: 'staff3', password: 'staff456', role: 'staff', name: 'Sivaranjani S', staffId: 'STF003', department: 'ACT', image: '/images/staff.jpg' },
   // Add more staff as needed
 ];
 

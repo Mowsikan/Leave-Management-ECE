@@ -82,6 +82,13 @@
   }
   
   .login-logo_hod{
-    width: 900px; /* Adjust size as necessary */
+    width: 600px; /* Adjust size as necessary */
     height: auto;
+  }
+  .profile-image{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+    align-items: center;
   }

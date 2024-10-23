@@ -7,23 +7,26 @@ import './StudentDashboard.css';
 const StudentDashboard = () => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [showForm, setShowForm] = useState(false);
-  
+  const [loading, setLoading] = useState(false);
+  const [proofUrl, setProofUrl] = useState(null);
+
+
   // Form state variables
   const [name, setName] = useState('');
   const [rollNo, setRollNo] = useState('');
   const [department, setDepartment] = useState('');
   const [yearOfStudy, setYearOfStudy] = useState('');
   const [reason, setReason] = useState('');
+  const [leavetype, setleavetype ] = useState('');
   const [proof, setProof] = useState(null);
-  
   const handleDateChange = (date) => {
     setSelectedDate(date);
-    setShowForm(true);  // Show form when a date is selected
+    setShowForm(true); // Show form when a date is selected
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    setLoading(true);
     // Create a FormData object for the request
     const formData = new FormData();
     formData.append('name', name);
@@ -33,12 +36,14 @@ const StudentDashboard = () => {
     formData.append('reason', reason);
     formData.append('proof', proof); // File input
     formData.append('date', selectedDate);
+    formData.append('leavetype', leavetype); // Add leave type to formData
 
     try {
       const response = await fetch('http://localhost:5000/api/leave-requests', {
         method: 'POST',
         body: formData,  // We don't use JSON.stringify for FormData
       });
+      const result = await response.json();
 
       if (response.ok) {
         alert('Leave request submitted successfully!');
@@ -49,15 +54,20 @@ const StudentDashboard = () => {
         setYearOfStudy('');
         setReason('');
         setProof(null);
+        setleavetype(''); // Clear the leave type
         setShowForm(false); // Hide the form after submission
         setSelectedDate(null); // Clear the selected date
+        if (result.proof) {
+          setProofUrl(result.proof); // Save the proof URL returned by the server
+        }
       } else {
-        const result = await response.json();
         alert(result.message || 'Error submitting leave request.');
       }
     } catch (err) {
       console.error('Request failed', err);
       alert('Error submitting leave request. Please try again later.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -157,6 +167,21 @@ const StudentDashboard = () => {
             /> 3rd yr
           </label>
 
+          {/* Dropdown for Leave Type */}
+          <label>
+            Leave Type:
+            <select
+              value={leavetype}
+              onChange={(e) => setleavetype(e.target.value)}
+              required
+            >
+              <option value="" disabled>Select Leave Type</option>
+              <option value="Sick Leave">Sick Leave</option>
+              <option value="Casual Leave">Formal Leave</option>
+              <option value="On Duty">OD (On Duty)</option>
+            </select>
+          </label>
+
           <label>
             Reason for leave/OD:
             <textarea
@@ -167,16 +192,25 @@ const StudentDashboard = () => {
           </label>
 
           <label>
-            Proof (optional):
-            <input
-              type="file"
-              onChange={(e) => setProof(e.target.files[0])} // File handling
-            />
-          </label>
+          Proof (optional):
+          <input
+            type="file"
+            onChange={(e) => setProof(e.target.files[0])} // File handling
+          />
+        </label>
 
-          <button type="submit">Submit Leave Request</button>
+          <button type="submit" disabled={loading}>
+            {loading ? 'Submitting...' : 'Submit Leave Request'}
+          </button>
         </form>
       )}
+          {/* After form submission, show proof download link if it exists */}
+    {proofUrl && (
+      <div>
+        <p>Proof submitted: <a href={`http://localhost:5000/${proofUrl}`} download>Download Proof</a></p>
+      </div>
+    )}
+
     </div>
   );
 };

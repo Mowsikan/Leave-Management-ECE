@@ -8,7 +8,6 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { strict } = require('assert');
 require('dotenv').config(); // Use dotenv to manage sensitive data
-const upload = multer({ dest: 'uploads/' }); 
 
 // Function to send leave request to staff
 async function sendLeaveRequestToStaff(staffEmail, leaveDetails) {
@@ -92,10 +91,29 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Multer storage configuration for file uploads
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, 'uploads/'),
-  filename: (req, file, cb) => cb(null, Date.now() + path.extname(file.originalname)), // Appends timestamp
+  destination: (req, file, cb) => {
+    cb(null, 'uploads/'); // Save files in the 'uploads' folder
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + path.extname(file.originalname)); // Use the current timestamp as the filename
+  }
 });
+const upload = multer({
+  storage: storage,
+  limits: { fileSize: 1000000 }, // Limit file size to 1MB
+  fileFilter: (req, file, cb) => {
+    // Filter file types (e.g., only allow images or PDFs)
+    const fileTypes = /jpeg|jpg|png|pdf/;
+    const extname = fileTypes.test(path.extname(file.originalname).toLowerCase());
+    const mimetype = fileTypes.test(file.mimetype);
 
+    if (mimetype && extname) {
+      return cb(null, true);
+    } else {
+      cb('Error: Only images and PDFs are allowed');
+    }
+  }
+});
 
 // CC Schema and Model
 const ccSchema = new mongoose.Schema({
@@ -128,6 +146,7 @@ const leaveRequestSchema = new mongoose.Schema({
   department: { type: String, required: true },
   yearOfStudy: { type: String, required: true },
   reason: { type: String, required: true },
+  leavetype:{type: String, required: true},
   proof: { type: String, required: false }, // Assuming proof can be optional
   date: { type: Date, required: true },
   status: { type: String, enum: ['Pending', 'Forwarded to HOD', 'Accepted', 'Rejected'],  // Add your statuses here
@@ -137,7 +156,7 @@ const leaveRequestSchema = new mongoose.Schema({
 const LeaveRequest = mongoose.model('LeaveRequest', leaveRequestSchema);
 
 // Routes
-
+app.use('/uploads', express.static('uploads'));
 // Test route
 app.get('/test', (req, res) => {
   res.send('Test route working!');
@@ -169,15 +188,18 @@ app.post("/submit-leave", async (req, res) => {
   }
 });
 
-// GET leave requests based on status
-// Example route in your backend (Express)
-
-
-
 // Get leave requests
 app.post('/api/leave-requests', upload.single('proof'), async (req, res) => {
   // Validate incoming request data
-  const { name, rollNo, department, yearOfStudy, reason, date } = req.body;
+  const { name, rollNo, department, yearOfStudy,leavetype, reason, date } = req.body;
+    // Check if file was uploaded
+  if (!req.file) {
+    return res.status(400).json({ message: 'No proof submitted.' });
+  }
+
+  // Save the request details (you can save to a database if necessary)
+  const proofFilePath = req.file.path; // Path to the uploaded file
+  
   if (!name || !rollNo || !department || !yearOfStudy || !reason || !date) {
     return res.status(400).json({ message: 'All fields are required.' });
   }
@@ -188,7 +210,8 @@ app.post('/api/leave-requests', upload.single('proof'), async (req, res) => {
     department,
     yearOfStudy,
     reason,
-    proof: req.file ? req.file.path : null, // Store the file path if a proof is uploaded
+    leavetype,
+    proof: req.file ? req.file.path : null, // Store file path if proof is uploaded
     date,
     status: 'Pending' // Set default status to 'Pending'
   });
@@ -205,7 +228,11 @@ app.post('/api/leave-requests', upload.single('proof'), async (req, res) => {
       console.warn(`No staff found for department: ${department}`);
     }
 
-    res.status(201).json({ message: 'Leave request submitted successfully!' });
+    res.status(201).json({
+      ...leaveRequest._doc, // Send all fields of the leave request
+      proofUrl: req.file ? `http://localhost:5000/${req.file.path}` : null  // Include proof URL if present
+    });
+    ({ message: 'Leave request submitted successfully!' });
   } catch (error) {
     console.error('Error creating leave request:', error); // Log the error for debugging
     res.status(500).json({ message: 'Error creating leave request', error: error.message });
