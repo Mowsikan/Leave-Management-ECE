@@ -85,7 +85,7 @@ const StudentDashboard = () => {
 
       {user && (
         <div className="profile-card">
-          <h2>Profile Details</h2>
+          <h2 className="profile-h2">Profile Details</h2>
           <img src="/images/mowsikan02.png" alt="mowsikan" className="profile-images"/>
           <p><strong>Name:</strong> {user.name}</p>
           <p><strong>Roll No:</strong> {user.rollNo}</p>

@@ -4,10 +4,11 @@
 .student-dashboard {
   max-width: 800px;
   padding: 20px;
-  background-color: #f4f7f6; /* Soft grey background */
+
   border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow for card effect */
   text-align: center;
+  max-height: 100vh; /* Limit to full view height */
+  padding-bottom: 20px; /* Add space at the bottom */
 }
 
 /* Main Heading */
@@ -162,7 +163,7 @@
   text-align: left;
 }
 
-.profile-card h2 {
+.profile-h2{
   text-align: center;
   margin-bottom: 20px;
   color: #007bff;
@@ -235,7 +236,6 @@ color: #333;
 .login-logo_stud {
   width: 600px; /* Adjust size as necessary */
   height: auto;
-  margin-top: 200px;
 }
 
 .profile-images{
@@ -249,4 +249,3 @@ color: #333;
   display: inline;
 
 }
-

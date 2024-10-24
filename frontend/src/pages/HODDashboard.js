@@ -1,10 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './HODDashboard.css';
+import { Bar } from 'react-chartjs-2';
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+
 
 const HODDashboard = () => {
   const [leaveRequests, setLeaveRequests] = useState([]);
   const [user, setUser] = useState(null);
+  const [chartData, setChartData] = useState(null);
 
    useEffect(() => {
     const fetchLeaveRequests = async () => {
@@ -21,6 +26,33 @@ const HODDashboard = () => {
     // Load user profile from localStorage
     const storedUser = JSON.parse(localStorage.getItem('user'));
     setUser(storedUser);
+    const fetchLeaveRequestData = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/api/leave-requests/analytics');
+        const data = await response.json();
+
+        // Assuming you're grouping leave requests by department:
+        const departments = data.departmentData.map((item) => item._id); // E.g., ['ECE-A', 'ECE-B', 'ACT']
+        const leaveCounts = data.departmentData.map((item) => item.count); // E.g., [5, 3, 7]
+
+        setChartData({
+          labels: departments,
+          datasets: [
+            {
+              label: 'Leave Requests per Department',
+              data: leaveCounts,
+              backgroundColor: 'rgba(75, 192, 192, 0.6)',
+              borderColor: 'rgba(75, 192, 192, 1)',
+              borderWidth: 1,
+            },
+          ],
+        });
+      } catch (err) {
+        console.error('Error fetching leave request data', err);
+      }
+    };
+
+    fetchLeaveRequestData();
   }, []);
 
   const acceptRequest = async (id) => {
@@ -42,6 +74,9 @@ const HODDashboard = () => {
       console.error('Error rejecting request:', error);
     }
   };
+if (!chartData) {
+    return <div>Loading chart...</div>;
+  }
 
   return (
     <div className="hod-dashboard">
@@ -51,7 +86,7 @@ const HODDashboard = () => {
       {user && (
         <div className="profile-card">
           <img src={user.image} alt={`${user.name}'s profile`} className="profile-image" />
-          <h3>Profile Details</h3>
+          <h2>Profile Details</h2>
           <p><strong>Name:</strong> {user.name}</p>
           <p><strong>HOD ID:</strong> {user.hodId}</p>
           <p><strong>Department:</strong> {user.department}</p>
@@ -59,6 +94,20 @@ const HODDashboard = () => {
         </div>
       )}
 
+<div className="analytics-section">
+      <h2>Leave Requests Analytics</h2>
+      <Bar
+        data={chartData}
+        options={{
+          responsive: true,
+          plugins: {
+            legend: { position: 'top' },
+            title: { display: true, text: 'Leave Requests by Department' },
+          },
+        }}
+      />
+    </div>
+    <div className="request-container">
       {leaveRequests.length === 0 ? (
         <p>No leave requests forwarded by staff</p>
       ) : (
@@ -73,6 +122,7 @@ const HODDashboard = () => {
           </div>
         ))
       )}
+      </div>
     </div>
   );
 };
