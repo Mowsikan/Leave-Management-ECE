@@ -1,14 +1,11 @@
-/* src/pages/StudentDashboard.css */
-
 /* Container for the entire student dashboard */
 .student-dashboard {
-  max-width: 800px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
   padding: 20px;
-
-  border-radius: 10px;
-  text-align: center;
-  max-height: 100vh; /* Limit to full view height */
-  padding-bottom: 20px; /* Add space at the bottom */
+  height: 100vh;
+  background-color: #f3f4f6;
 }
 
 /* Main Heading */
@@ -27,16 +24,18 @@
 }
 
 /* Form container */
-.leave-form {
+.stud-leave-form {
+  grid-column: 1 / span 2;
   background-color: white;
   padding: 30px;
   border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Shadow for card-like effect */
-  margin-top: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  max-width: 1500px; /* Adjust width as needed */
+  width: 100%;
 }
 
 /* Form Heading */
-.leave-form h2 {
+.stud-leave-form h2 {
   color: #333;
   margin-bottom: 20px;
   font-size: 1.5rem;
@@ -45,52 +44,52 @@
 }
 
 /* Input field styling */
-.leave-form label {
+.stud-leave-form label {
   display: block;
   font-size: 1rem;
-  color: #444; /* Slightly darker grey for labels */
+  color: #444;
   font-weight: 600;
   margin-bottom: 8px;
   text-align: left;
 }
 
-.leave-form input[type="text"],
-.leave-form textarea,
-.leave-form input[type="file"] {
+.stud-leave-form input[type="text"],
+.stud-leave-form textarea,
+.stud-leave-form input[type="file"] {
   width: 100%;
   padding: 12px;
   border-radius: 8px;
   border: 1px solid #ccc;
   font-size: 1rem;
   margin-bottom: 20px;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Smooth focus transition */
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 /* Focused input fields */
-.leave-form input[type="text"]:focus,
-.leave-form textarea:focus {
-  border-color: #28a745; /* Green border on focus */
-  box-shadow: 0 0 8px rgba(40, 167, 69, 0.3); /* Green shadow effect on focus */
+.stud-leave-form input[type="text"]:focus,
+.stud-leave-form textarea:focus {
+  border-color: #007bff; /* Blue border on focus */
+  box-shadow: 0 0 8px rgba(0, 123, 255, 0.3);
 }
 
 /* Textarea */
-.leave-form textarea {
+.stud-leave-form textarea {
   height: 120px;
-  resize: vertical; /* Allow vertical resize */
+  resize: vertical;
 }
 
 /* Radio button styling */
-.leave-form input[type="radio"] {
+.stud-leave-form input[type="radio"] {
   margin-right: 10px;
 }
 
-.leave-form label input[type="radio"] + label {
+.stud-leave-form label input[type="radio"] + label {
   margin-right: 20px;
 }
 
 /* Submit Button Styling */
-.leave-form button[type="submit"] {
-  background-color: #ff4800; /* Professional green color */
+.stud-leave-form button[type="submit"] {
+  background-color: #ff4800;
   color: white;
   padding: 12px 20px;
   border: none;
@@ -98,154 +97,173 @@
   font-size: 1.2rem;
   cursor: pointer;
   width: 100%;
-  transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth hover transition */
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
-/* Hover effect for submit button */
-.leave-form button[type="submit"]:hover {
-  background-color: #ff4d00; /* Darker green on hover */
-  transform: translateY(-3px); /* Slight lift effect */
+.stud-leave-form button[type="submit"]:hover {
+  background-color: #ff4d00;
+  transform: translateY(-3px);
 }
 
 /* Responsive Design */
-
-/* Larger screens */
 @media (max-width: 1024px) {
   .student-dashboard {
     padding: 30px;
   }
 
-  .leave-form {
+  .stud-leave-form {
     padding: 20px;
   }
 }
 
-/* Medium screens (tablets, small laptops) */
 @media (max-width: 768px) {
   .student-dashboard {
     max-width: 100%;
     padding: 20px;
   }
 
-  .leave-form {
+  .stud-leave-form {
     padding: 15px;
   }
 }
 
-/* Mobile screens */
 @media (max-width: 480px) {
   .student-dashboard h1 {
     font-size: 1.8rem;
   }
 
-  .leave-form h2 {
+  .stud-leave-form h2 {
     font-size: 1.3rem;
   }
 
-  .leave-form input,
-  .leave-form textarea {
+  .stud-leave-form input,
+  .stud-leave-form textarea {
     font-size: 0.9rem;
     padding: 10px;
   }
 
-  .leave-form button[type="submit"] {
+  .stud-leave-form button[type="submit"] {
     font-size: 1rem;
     padding: 10px;
   }
 }
-.profile-card {
-  margin: 20px auto;
-  padding: 20px;
+
+/* Profile Card Styling */
+.stud-profile-card {
+  background-color: #fff;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  max-width: 400px;
-  background-color: #fff;
+  max-width: 100%;
   text-align: left;
 }
 
-.profile-h2{
+.stud-profile-card h2 {
   text-align: center;
   margin-bottom: 20px;
   color: #007bff;
 }
 
-.profile-card p {
+.stud-profile-images {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 200px;
+}
+
+.stud-profile-card p {
   margin: 10px 0;
   font-size: 16px;
   color: #333;
   text-align: center;
 }
-
-.profile-card strong {
+.staff-profile-card strong {
   font-weight: 600;
 }
 
-.calendar-section {
-  margin-bottom: 20px; /* Space below calendar */
-  text-align: center; /* Center calendar text */
-  width: 100%; /* Full width for smaller screens */
-  max-width: 400px; /* Limit width */
-  align-items: center;
+/* Calendar Section Styling */
+.stud-calendar-section {
+  grid-column: 2; /* Ensures this is in the right column */
+  max-width: 350px;
+   margin: auto;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .react-calendar {
-  border: none; /* Remove default border */
-  border-radius: 8px; /* Rounded corners */
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-  overflow: hidden; /* Clip excess */
-color: #333;
-  margin: auto;
-  width: 50%;
-  padding: 10px;
-}
-
-/* Ensuring text color for the tiles */
-.react-calendar__month-view__days__day {
-  color: black; /* Default text color for days */
-}
-.react-calendar__month-view__header {
-  color: black; /* Color for month names */
-  font-weight: bold; /* Bold font for month names */
-}
-.react-calendar__navigation button{
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   color: #333;
-  background-color: #ffffff; /* Light gray background on hover */
+  margin: auto;
+  padding: 10px;
+  max-width: 350px;
 }
 
+.react-calendar__month-view__days__day,
+.react-calendar__month-view__header,
+.react-calendar__navigation button {
+  color: #333;
+}
 
 .react-calendar__navigation button:hover {
-  color: #333;
-  background-color: #ff0000; /* Light gray background on hover */
+  background-color: #ff0000;
 }
 
 .react-calendar__tile {
-  border-radius: 4px; /* Rounded corners for calendar tiles */
+  border-radius: 4px;
   color: #333;
 }
 
 .react-calendar__tile:enabled:hover {
-  background-color: #007bff; /* Change background on hover */
-  color: white; /* White text on hover */
+  background-color: #007bff;
+  color: white;
 }
 
 .react-calendar__tile--active {
-  background-color: #0056b3; /* Active date color */
-  color: white; /* White text for active date */
+  background-color: #0056b3;
+  color: white;
 }
 
+/* Centered Elements */
 .login-logo_stud {
-  width: 600px; /* Adjust size as necessary */
+  grid-column: 1 / span 2; /* Center logo across both columns */
+  width: 600px; 
   height: auto;
-}
-
-.profile-images{
   display: block;
   margin-left: auto;
   margin-right: auto;
-  width: 50%;
 }
 
-.nav-bar-comp{
-  display: inline;
-
+.stud-text{
+  text-align: center;
+  grid-column: 1 / span 2;
+}
+.login-logo_stud {
+  width: 700px;
+  height: auto;
+  grid-column: 1 / span 2; /* Center across both columns */
+  display: block;
+  margin: 0 auto 10px;
+}
+.stud-calendar-div{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+}
+.stud-calendar-div-text {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #007bff;
+  text-align: center;
+  margin-bottom: 10px;
+}
+.stud-leave-form-container {
+  grid-column: 1 / span 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 }

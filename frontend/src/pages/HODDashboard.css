@@ -11,7 +11,7 @@
   grid-column: 1 / span 2; /* Center the text across both columns */
 }
 
-.profile-card {
+.hod-profile-card {
   grid-column: 1; /* Ensures this is in the left column */
   background-color: #fff;
   border-radius: 8px;
@@ -23,19 +23,19 @@
   margin: 0 auto;
 }
 
-.profile-card h2 {
+.hod-profile-card h2 {
   margin-bottom: 10px;
   color: #333;
 }
 
-.profile-card p {
+.hod-profile-card p {
   margin: 10px 0;
   font-size: 16px;
   color: #333;
   text-align: center;
 }
 
-.analytics-section {
+.hod-analytics-section {
   grid-column: 2; /* Ensures this is in the right column */
   margin: 0;
   background-color: #fff;
@@ -44,7 +44,7 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.request-container {
+.hod-request-container {
   grid-column: 1 / span 2; /* Make it span across both columns */
   display: flex;
   flex-wrap: wrap;
@@ -52,7 +52,7 @@
   margin-top: 20px;
 }
 
-.request-item {
+.hod-request-item {
   flex: 1 1 30%; /* Flex-basis ensures 3 items per row (adjust if needed) */
   background-color: #f9f9f9;
   padding: 15px;
@@ -61,21 +61,21 @@
   margin-bottom: 15px;
 }
 
-.request-item button {
+.hod-request-item button {
   background-color: #007bff;
   color: white;
   
 }
 
-.request-item button:hover {
+.hod-request-item button:hover {
   background-color: #0056b3;
 }
 
-.request-item button:last-child {
+.hod-request-item button:last-child {
   background-color: #dc3545;
 }
 
-.request-item button:last-child:hover {
+.hod-request-item button:last-child:hover {
   background-color: #c82333;
 }
 
@@ -87,7 +87,7 @@
   margin-left: auto;
   margin-right: auto;
 }
-.profile-image{
+.hod-profile-image{
   display: block;
   margin-left: auto;
   margin-right: auto;

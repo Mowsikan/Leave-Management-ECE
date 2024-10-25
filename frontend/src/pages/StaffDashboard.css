@@ -6,7 +6,7 @@
   height: 100vh; /* Full height of the viewport */
 }
 
-.profile-card {
+.staff-profile-card {
   grid-column: 1; /* Ensures this is in the left column */
   margin: 0;
   padding: 20px;
@@ -17,24 +17,24 @@
   text-align: left;
 }
 
-.profile-card h2 {
+.staff-profile-card h2 {
   text-align: center;
   margin-bottom: 20px;
   color: #007bff;
 }
 
-.profile-card p {
+.staff-profile-card p {
   margin: 10px 0;
   font-size: 16px;
   color: #333;
   text-align: center;
 }
 
-.profile-card strong {
+.staff-profile-card strong {
   font-weight: 600;
 }
 
-.analytics-section {
+.staff-analytics-section {
   grid-column: 2; /* Ensures this is in the right column */
   margin: 0;
   background-color: #fff;
@@ -43,7 +43,7 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.request-container {
+.staff-request-container {
   grid-column: 1 / span 2; /* Make it span across both columns */
   display: flex;
   flex-wrap: wrap;
@@ -51,7 +51,7 @@
   margin-top: 20px;
 }
 
-.request-item {
+.staff-request-item {
   flex: 1 1 30%; /* Flex-basis ensures 3 items per row (adjust if needed) */
   background-color: #f9f9f9;
   padding: 15px;
@@ -63,15 +63,29 @@
 button {
   margin-right: 10px;
   padding: 8px 12px;
-  background-color: #f44336;
+  background-color: #ff4800; /* Change to match student styling */
   color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
 }
 
-button:hover {
-  background-color: #e53935;
+.staff-request-item button {
+  background-color: #007bff;
+  color: white;
+  
+}
+
+.staff-request-item button:hover {
+  background-color: #0056b3;
+}
+
+.staff-request-item button:last-child {
+  background-color: #dc3545;
+}
+
+.staff-request-item button:last-child:hover {
+  background-color: #c82333;
 }
 
 .login-logo_staff {
@@ -88,7 +102,7 @@ button:hover {
   grid-column: 1 / span 2; /* Center the text across both columns */
 }
 
-.profile-image {
+.staff-profile-image {
   display: block;
   margin-left: auto;
   margin-right: auto;

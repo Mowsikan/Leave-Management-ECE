@@ -86,8 +86,8 @@ const StaffDashboard = () => {
       <h2 className="staff-text">Staff Dashboard</h2>
 
       {user && (
-        <div className="profile-card">
-          <img src={user.image} alt={`${user.name}'s profile`} className="profile-image" />
+        <div className="staff-profile-card">
+          <img src={user.image} alt={`${user.name}'s profile`} className="staff-profile-image" />
           <h2>Profile Details</h2>
           <p><strong>Name:</strong> {user.name}</p>
           <p><strong>Staff ID:</strong> {user.staffId}</p>
@@ -96,7 +96,7 @@ const StaffDashboard = () => {
         </div>
       )}
 
-      <div className="analytics-section">
+      <div className="staff-analytics-section">
         <h2>Leave Requests Analytics</h2>
         <Bar
           data={chartData}
@@ -110,12 +110,12 @@ const StaffDashboard = () => {
         />
       </div>
 
-      <div className="request-container">
+      <div className="staff-request-container">
         {leaveRequests.length === 0 ? (
           <p>No pending leave requests</p>
         ) : (
           leaveRequests.map((request) => (
-            <div key={request._id} className="request-item">
+            <div key={request._id} className="staff-request-item">
               <p><strong>Name:</strong> {request.name}</p>
               <p><strong>Roll No:</strong> {request.rollNo}</p>
               <p><strong>Reason:</strong> {request.reason}</p>

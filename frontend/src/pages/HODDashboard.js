@@ -84,8 +84,8 @@ if (!chartData) {
       <h2 className="hod-text">HOD Dashboard</h2>
 
       {user && (
-        <div className="profile-card">
-          <img src={user.image} alt={`${user.name}'s profile`} className="profile-image" />
+        <div className="hod-profile-card">
+          <img src={user.image} alt={`${user.name}'s profile`} className="hod-profile-image" />
           <h2>Profile Details</h2>
           <p><strong>Name:</strong> {user.name}</p>
           <p><strong>HOD ID:</strong> {user.hodId}</p>
@@ -94,7 +94,7 @@ if (!chartData) {
         </div>
       )}
 
-<div className="analytics-section">
+<div className="hod-analytics-section">
       <h2>Leave Requests Analytics</h2>
       <Bar
         data={chartData}
@@ -107,12 +107,12 @@ if (!chartData) {
         }}
       />
     </div>
-    <div className="request-container">
+    <div className="hod-request-container">
       {leaveRequests.length === 0 ? (
         <p>No leave requests forwarded by staff</p>
       ) : (
         leaveRequests.map((request) => (
-          <div key={request._id} className="request-item">
+          <div key={request._id} className="hod-request-item">
             <p><strong>Name:</strong> {request.name}</p>
             <p><strong>Roll No:</strong> {request.rollNo}</p>
             <p><strong>Reason:</strong> {request.reason}</p>

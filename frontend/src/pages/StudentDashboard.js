@@ -81,12 +81,12 @@ const StudentDashboard = () => {
   return (
     <div className="student-dashboard">
       <img src="/images/collegeLogo.png" alt="College Logo" className="login-logo_stud" />
-      <h1>Student Dashboard</h1>
+      <h1 className="stud-text">Student Dashboard</h1>
 
       {user && (
-        <div className="profile-card">
-          <h2 className="profile-h2">Profile Details</h2>
-          <img src="/images/mowsikan02.png" alt="mowsikan" className="profile-images"/>
+        <div className="stud-profile-card">
+          <h2 className="stud-profile-h2">Profile Details</h2>
+          <img src="/images/mowsikan02.png" alt="mowsikan" className="stud-profile-images"/>
           <p><strong>Name:</strong> {user.name}</p>
           <p><strong>Roll No:</strong> {user.rollNo}</p>
           <p><strong>Department:</strong> {user.department}</p>
@@ -94,13 +94,13 @@ const StudentDashboard = () => {
         </div>
       )}
 
-      <div>
-        <h3>Select a date to submit a leave/OD request:</h3>
+      <div className="stud-Calender-div">
+        <h3 className="stud-calendar-div-text">Select a date to submit a leave/OD request:</h3>
         <Calendar onChange={handleDateChange} value={selectedDate} />
       </div>
-
+<div className="stud-leave-form-container">
       {showForm && (
-        <form onSubmit={handleSubmit} className="leave-form">
+        <form onSubmit={handleSubmit} className="stud-leave-form">
           <h2>Leave/OD Request for {selectedDate && selectedDate.toDateString()}</h2>
           
           <label>
@@ -204,6 +204,7 @@ const StudentDashboard = () => {
           </button>
         </form>
       )}
+      </div>
           {/* After form submission, show proof download link if it exists */}
     {proofUrl && (
       <div>
