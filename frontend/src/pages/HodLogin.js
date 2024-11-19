@@ -1,72 +1,26 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import './LoginForm.css'; // Make sure to include your CSS
-
-
-const users = [
-  { username: 'hod', password: 'hod123', role: 'hod', name: 'Dr. Sudhakar', hodId: 'HOD001', department: 'ECE', image: '/images/hod.jpg' },
-];
-
+import axios from 'axios';
 
 const HODLogin = () => {
-  const navigate = useNavigate();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
   const handleLogin = async (e) => {
-      e.preventDefault();
-      console.log("Attempting to log in:", username); // Debugging line
+    e.preventDefault();
+    try {
+        const response = await axios.post('http://localhost:5000/login', { username, password });
+        const { user } = response.data;
 
-      const user = users.find((u) => u.username === username && u.password === password);
-      console.log("Found user:", user); // Debugging line
-
-      if (user) {
-          switch (user.role) {
-              case 'student':
-                  navigate('/studentDashboard');
-                  break;
-              case 'staff':
-                  navigate('/staffDashboard');
-                  break;
-              case 'hod':
-                  navigate('/hodDashboard');
-                  break;
-              default:
-                  break;
-          }
-          const userData = { 
-            name: user.name, 
-            hodId: user.hodId, 
-            department: user.department, 
-            image: user.image, 
-            role: user.role 
-          };
-          localStorage.setItem('user', JSON.stringify(userData));
-          
-      } else {
-          setError('Invalid username or password. Please try again.');
-      }
-
-      try {
-          const response = await fetch(`http://localhost:5000/api/login`, {
-              method: 'POST',
-              body: JSON.stringify({ username, password }),
-              headers: {
-                  'Content-Type': 'application/json',
-              },
-          });
-
-          const data = await response.json();
-          if (data.token) {
-              localStorage.setItem('token', data.token);
-              localStorage.setItem('user', JSON.stringify(data.user));
-              navigate('/studentDashboard');
-          }
-      } catch (error) {
-          console.error('Login failed', error);
-      }
-  };
+        // Redirect based on role
+        if (user.role === 'student') window.location.href = '/studentDashboard';
+        else if (user.role === 'staff') window.location.href = '/staffDashboard';
+        else if (user.role === 'HOD') window.location.href = '/hodDashboard';
+    } catch (error) {
+        setError(error.response ? error.response.data.message : 'Error logging in');
+    }
+};
 
   return (
     <div className="login-form">

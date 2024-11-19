@@ -85,11 +85,11 @@ if (!chartData) {
 
       {user && (
         <div className="hod-profile-card">
-          <img src={user.image} alt={`${user.name}'s profile`} className="hod-profile-image" />
+          <img src="/images/hod.jpg" alt={`${user.name}'s profile`} className="hod-profile-image" />
           <h2>Profile Details</h2>
-          <p><strong>Name:</strong> {user.name}</p>
-          <p><strong>HOD ID:</strong> {user.hodId}</p>
-          <p><strong>Department:</strong> {user.department}</p>
+          <p><strong>Name:</strong> HOD</p>
+          <p><strong>HOD ID:</strong> hod123</p>
+          <p><strong>Department:</strong>ECE</p>
           <p><strong>Role:</strong> Head of Department (HOD)</p>
         </div>
       )}

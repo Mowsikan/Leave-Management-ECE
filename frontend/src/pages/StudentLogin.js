@@ -1,43 +1,34 @@
 // src/pages/StudentLogin.js
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import './LoginForm.css'; // Make sure to include your CSS
-
-// Simulated user database
-const users = [
-  { username: 'Yashwanth', password: 'student123', rollNo: '12345', department: 'ECE-A', year: '2nd yr', role: 'student' },
-  { username: 'Mowsikan.H', password: '08052006', rollNo: '727623BEA030', department: 'ACT', year: '2nd yr', role: 'student' },
-  { username: 'Vicky', password: '08052006', rollNo: '123456', department: 'ECE-B', year: '3rd yr', role: 'student' },
-];
+import axios from 'axios';
 
 const StudentLogin = () => {
-  const navigate = useNavigate();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    console.log("Attempting to log in:", username);
+    try {
+        const response = await axios.post('http://localhost:5000/login', { username, password });
+        const { user, token } = response.data; // Expect token from the response
 
-    // Find the user based on the username and password
-    const user = users.find((u) => u.username === username && u.password === password);
+        // Store token in localStorage for future requests
+        if (token) {
+            localStorage.setItem('token', token);
+        } else {
+            throw new Error('Token not provided');
+        }
 
-    if (user) {
-      // Store the user details in localStorage for future access
-      const userData = {
-        name: user.username,
-        rollNo: user.rollNo,
-        department: user.department,
-        year: user.year
-      };
-      localStorage.setItem('user', JSON.stringify(userData));
-
-      navigate('/studentDashboard'); // Redirect to student dashboard after login
-    } else {
-      setError('Invalid username or password. Please try again.');
+        // Redirect based on role
+        if (user.role === 'student') window.location.href = '/studentDashboard';
+        else if (user.role === 'staff') window.location.href = '/staffDashboard';
+        else if (user.role === 'HOD') window.location.href = '/hodDashboard';
+    } catch (error) {
+        setError(error.response ? error.response.data.message : 'Error logging in');
     }
-  };
+};
 
   return (
     <div className="login-form">

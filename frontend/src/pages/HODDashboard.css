@@ -13,19 +13,19 @@
 
 .hod-profile-card {
   grid-column: 1; /* Ensures this is in the left column */
-  background-color: #fff;
-  border-radius: 8px;
+  margin: 0;
+  padding: 20px;
+  border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  padding: 15px;
-  margin-bottom: 20px;
+  max-width: 100%;
+  background-color: #fff;
   text-align: left;
-  width: 300px;
-  margin: 0 auto;
 }
 
 .hod-profile-card h2 {
-  margin-bottom: 10px;
-  color: #333;
+  text-align: center;
+  margin-bottom: 20px;
+  color: #007bff;
 }
 
 .hod-profile-card p {
@@ -34,6 +34,11 @@
   color: #333;
   text-align: center;
 }
+
+.hod-profile-card strong {
+  font-weight: 600;
+}
+
 
 .hod-analytics-section {
   grid-column: 2; /* Ensures this is in the right column */

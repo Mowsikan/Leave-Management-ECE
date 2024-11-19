@@ -25,7 +25,7 @@ const StaffDashboard = () => {
     // Load user profile from localStorage
     const storedUser = JSON.parse(localStorage.getItem('user'));
     setUser(storedUser);
-
+    
     const fetchLeaveRequestData = async () => {
       try {
         const response = await fetch('http://localhost:5000/api/leave-requests/analytics');
@@ -85,16 +85,16 @@ const StaffDashboard = () => {
       <img src="/images/collegeLogo.png" alt="College Logo" className="login-logo_staff" />
       <h2 className="staff-text">Staff Dashboard</h2>
 
-      {user && (
+ {user && (
         <div className="staff-profile-card">
-          <img src={user.image} alt={`${user.name}'s profile`} className="staff-profile-image" />
           <h2>Profile Details</h2>
-          <p><strong>Name:</strong> {user.name}</p>
-          <p><strong>Staff ID:</strong> {user.staffId}</p>
-          <p><strong>Department:</strong> {user.department}</p>
+          <img src="/images/staff.jpg" alt="Profile" className="staff-profile-image" />
+          <p><strong>Name:</strong> Sivaranjani S</p>
+          <p><strong>Staff Id:</strong> Staff123</p>
+          <p><strong>Department:</strong> ECE-ACT</p>
           <p><strong>Role:</strong> Staff</p>
         </div>
-      )}
+      ) }
 
       <div className="staff-analytics-section">
         <h2>Leave Requests Analytics</h2>
