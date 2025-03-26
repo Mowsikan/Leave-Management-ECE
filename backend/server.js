@@ -8,6 +8,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { strict } = require('assert');
 const { type } = require('os');
+const bodyParser = require('body-parser');
 require('dotenv').config(); // Use dotenv to manage sensitive data
 
 
@@ -51,6 +52,10 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+// Increase the limit for the body parser
+app.use(bodyParser.json({ limit: '10mb' })); // Adjust the limit as needed
+app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));
 
 // Multer storage configuration for file uploads
 const storage = multer.diskStorage({
@@ -139,28 +144,71 @@ app.get('/test', (req, res) => {
 });
 
 // Submit leave request
+// Define getStaffByDepartment and sendLeaveRequestToStaff above or import them if they are in another file.
+
+function getStaffByDepartment(department) {
+  const departmentStaffEmails = {
+    "ECE-A": "ece_staff@example.com",
+    "ECE-B": "cse_staff@example.com",
+    "ACT": "sivaranjani3ccece@gmail.com",
+    // Add other departments as needed
+  };
+  return departmentStaffEmails[department] || null;
+}
+
+async function sendLeaveRequestToStaff(staffEmail, leaveDetails) {
+  const mailOptions = {
+    from: process.env.EMAIL_USER,
+    to: staffEmail,
+    subject: 'New Leave Request Received',
+    text: `You have received a new leave request:\n\n${JSON.stringify(leaveDetails, null, 2)}`
+  };
+
+  await transporter.sendMail(mailOptions);
+}
+
+// Submit leave request route
 app.post("/submit-leave", async (req, res) => {
   const { studentName, rollNo, department, year, reason, proof } = req.body;
 
+  // Get the staff email based on department
   const staffEmail = getStaffByDepartment(department);
 
   if (staffEmail) {
-      try {
-          await sendLeaveRequestToStaff(staffEmail, {
-              studentName,
-              rollNo,
-              department,
-              year,
-              reason,
-              proof,
-          });
+    try {
+      // Save the leave request in the database
+      const leaveRequest = new LeaveRequest({
+        name: studentName,  // Ensure the property names match the schema
+        rollNo,
+        department,
+        yearOfStudy: year,  // Ensure the field name matches
+        reason,
+        leavetype: "Leave",  // Set default leave type if needed
+        proof: proof || null,  // Optional proof file
+        date: new Date(),  // Use the current date if not provided
+        status: "Pending",
+      });
 
-          res.status(200).json({ message: "Leave request sent to staff" });
-      } catch (error) {
-          res.status(500).json({ message: "Error sending leave request", error: error.message });
-      }
+      await leaveRequest.save(); // Save to DB
+
+      // Send email notification
+      await sendLeaveRequestToStaff(staffEmail, {
+        studentName,
+        rollNo,
+        department,
+        year,
+        reason,
+        proof,
+      });
+
+      res.status(201).json({ message: "Leave request saved and sent to staff", leaveRequest });
+
+    } catch (error) {
+      console.error("Error saving leave request:", error);
+      res.status(500).json({ message: "Error saving leave request", error: error.message });
+    }
   } else {
-      res.status(400).json({ message: "Staff not found for department" });
+    res.status(400).json({ message: "Staff not found for department" });
   }
 });
 
@@ -215,10 +263,11 @@ app.post('/api/leave-requests', upload.single('proof'), async (req, res) => {
 });
 
 
-//get all requests
+// Get all pending leave requests (for staff dashboard)
 app.get('/api/leave-requests', async (req, res) => {
   try {
-    const leaveRequests = await LeaveRequest.find({ status: 'Pending' }); // Adjust query as needed
+    // Find leave requests with status 'Pending'
+    const leaveRequests = await LeaveRequest.find({ status: 'Pending' });
     res.status(200).json(leaveRequests);
   } catch (error) {
     console.error('Error fetching leave requests:', error);
@@ -226,8 +275,11 @@ app.get('/api/leave-requests', async (req, res) => {
   }
 });
 
+
 //login from DB
 const secretKey='Mowsi@123';
+
+
 app.post('/login', async (req, res) => {
   const { username, password } = req.body;
 
@@ -293,15 +345,16 @@ app.post('/add-student', upload.single('profileImage'), async (req, res) => {
   }
 });
 
+
 // Route for staff to approve and forward the request to HOD
 app.put('/api/leave-requests/forward-to-hod/:id', async (req, res) => {
   try {
     const leaveRequestId = req.params.id;
-
-    // Find the leave request and update its status to 'Forwarded to HOD'
+    
+    // Update the leave request's status to 'Forwarded to HOD'
     const leaveRequest = await LeaveRequest.findByIdAndUpdate(
       leaveRequestId,
-      { status: 'Forwarded to HOD' },  // Status updated after staff approval
+      { status: 'Forwarded to HOD' },
       { new: true }
     );
 
@@ -309,15 +362,15 @@ app.put('/api/leave-requests/forward-to-hod/:id', async (req, res) => {
       return res.status(404).json({ message: 'Leave request not found' });
     }
 
-    // Send emails to both recipients simultaneously
+    // Send emails to notify that the leave request is forwarded
     await Promise.all([
       sendEmail('mowsikan08@gmail.com', 'New Leave Request', 'New Leave Request forwarded by CC'),
       sendEmail('selvihari2006@gmail.com', 'Leave Request Status', 'Your Leave request forwarded to HOD')
     ]);
 
-    res.status(200).json({ message: 'Leave request forwarded to HOD successfully', leaveRequest }); 
-
+    res.status(200).json({ message: 'Leave request forwarded to HOD successfully', leaveRequest });
   } catch (error) {
+    console.error('Error forwarding leave request:', error);
     res.status(500).json({ message: 'Server error while forwarding leave request', error });
   }
 });
@@ -409,17 +462,16 @@ app.get('/api/leave-requests/analytics', async (req, res) => {
   try {
     const leaveRequests = await LeaveRequest.find(); // Fetch all leave requests
     
-    // You can modify this query to group by departments, leave type, or status.
-    // For example, you can count leave requests by department:
+    // Group leave requests by department
     const departmentData = await LeaveRequest.aggregate([
       { $group: { _id: "$department", count: { $sum: 1 } } }
     ]);
 
-    res.status(200).json({ departmentData, leaveRequests });  // Send the data
+    res.status(200).json({ departmentData, leaveRequests });
   } catch (error) {
     res.status(500).json({ message: 'Error fetching leave request data', error });
   }
-});
+})
 
 // Start server
 app.listen(PORT, () => {

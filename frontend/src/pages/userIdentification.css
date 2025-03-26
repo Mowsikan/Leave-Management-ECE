@@ -1,90 +1,181 @@
 .user-identification {
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  height: 100vh;
-  background-color: #f0f4f8;
-  text-align: center;
+ 
+  padding: 2rem;
 }
 
-h1 {
-  margin-bottom: 30px; /* More space between the title and options */
+.college-logo {
+  width: 600px;
+  height: auto;
+  margin-bottom: 2rem;
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
+}
+
+.welcome-section {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.welcome-section h1 {
+  color: #2c3e50;
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.welcome-section p {
+  color: #6c757d;
+  font-size: 1.2rem;
 }
 
 .user-options {
   display: flex;
-  justify-content: center; /* Align items to the center */
-  gap: 30px; /* Gap between the options for better spacing */
-  flex-wrap: wrap; /* Ensure responsiveness on smaller screens */
-  width: 100%;
-  max-width: 900px;
+  gap: 2rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .user-option {
+  background: white;
+  border-radius: 20px;
+  padding: 2rem;
+  width: 300px;
   cursor: pointer;
-  transition: transform 0.2s;
-  flex: 1;
-  max-width: 200px; /* Restrict maximum width for each option */
-  margin: 0 10px; /* Equal spacing on both sides */
-  text-align: center; /* Center text and image */
-  padding: 20px; /* Add padding inside the card */
-  border: 2px solid #ccc; /* Card border */
-  border-radius: 10px; /* Rounded corners for the card */
-  background-color: white; /* Card background */
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
 }
 
-.user-option img {
-  width: 120px; /* Adjust the size of the icons */
-  height: auto; /* Maintain the aspect ratio */
-  margin-bottom: 10px;
+.user-option::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: #ff4800;
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
 }
 
-.user-option p {
-  font-size: 18px;
-  font-weight: bold;
-  margin-top: 5px;
+.user-option:hover::before {
+  transform: scaleX(1);
 }
 
-.user-option:hover {
-  transform: scale(1.05); /* Slightly enlarge the card on hover */
-  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.2); /* Stronger shadow on hover */
+.option-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
 }
 
-.logo-useridentification {
-  height: 200px;
-  width: 900px;
-  margin-bottom: 30px; /* Space between logo and heading */
+.option-content img {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  transition: transform 0.3s ease;
 }
 
-@media only screen and (max-width: 768px) {
-  .user-options {
-    flex-direction: column; /* Stack vertically on small screens */
-    align-items: center; /* Center items when stacked */
+.user-option:hover .option-content img {
+  transform: scale(1.1);
+}
+
+.option-content h2 {
+  color: #2c3e50;
+  font-size: 1.5rem;
+  margin: 0;
+}
+
+.option-content p {
+  color: #6c757d;
+  text-align: center;
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.footer {
+  margin-top: auto;
+  padding: 2rem 0;
+  text-align: center;
+  color: #6c757d;
+  font-size: 0.9rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .college-logo {
+    width: 90%;
+    max-width: 400px;
+  }
+
+  .welcome-section h1 {
+    font-size: 2rem;
+  }
+
+  .welcome-section p {
+    font-size: 1rem;
   }
 
   .user-option {
-    margin-bottom: 20px;
-  }
-
-  .logo-useridentification {
-    height: 150px;
-    width: 600px;
+    width: 100%;
+    max-width: 300px;
   }
 }
 
-@media only screen and (max-width: 400px) {
-  .user-option img {
-    width: 80px; /* Smaller image for mobile */
+/* Animation Classes */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeInUp {
+  animation: fadeInUp 0.5s ease forwards;
+}
+
+/* Hover Effects */
+.user-option:hover {
+  background: linear-gradient(145deg, #ffffff, #f8f9fa);
+}
+
+/* Accessibility */
+.user-option:focus {
+  outline: 2px solid #ff4800;
+  outline-offset: 2px;
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  .user-identification {
+    background: linear-gradient(135deg, #1a1a1a 0%, #2c3e50 100%);
   }
 
-  .logo-useridentification {
-    height: 100px;
-    width: 300px;
+  .welcome-section h1,
+  .option-content h2 {
+    color: #f8f9fa;
   }
 
-  .user-option p {
-    font-size: 16px;
+  .welcome-section p,
+  .option-content p,
+  .footer {
+    color: #dee2e6;
+  }
+
+  .user-option {
+    background: #2c3e50;
+  }
+
+  .user-option:hover {
+    background: linear-gradient(145deg, #2c3e50, #34495e);
   }
 }
